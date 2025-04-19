@@ -1,152 +1,107 @@
-import { LegendList } from '@legendapp/list';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { Icon } from '@roninoss/icons';
-import { cssInterop } from 'nativewind';
+import { Link, router } from 'expo-router';
 import * as React from 'react';
-import { Linking, useWindowDimensions, View, Alert } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image, Platform, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AlertAnchor } from '~/components/nativewindui/Alert';
+import { AlertRef } from '~/components/nativewindui/Alert/types';
+import { Button } from '~/components/nativewindui/Button';
 import { Text } from '~/components/nativewindui/Text';
-import { useColorScheme } from '~/lib/useColorScheme';
-import { useHeaderSearchBar } from '~/lib/useHeaderSearchBar';
+import { authState, signOut } from '~/lib/auth';
 
-cssInterop(LegendList, {
-  className: 'style',
-  contentContainerClassName: 'contentContainerStyle',
-});
+const LOGO_SOURCE = {
+  uri: 'https://nativewindui.com/_next/image?url=/_next/static/media/logo.28276aeb.png&w=2048&q=75',
+};
 
-export default function Screen() {
-  const searchValue = useHeaderSearchBar({ hideWhenScrolling: COMPONENTS.length === 0 });
+const GOOGLE_SOURCE = {
+  uri: 'https://www.pngall.com/wp-content/uploads/13/Google-Logo.png',
+};
 
-  const data = searchValue
-    ? COMPONENTS.filter((c) => c.name.toLowerCase().includes(searchValue.toLowerCase()))
-    : COMPONENTS;
+export default function WelcomeScreen() {
+  const alertRef = React.useRef<AlertRef>(null);
+  const user = authState.user.get();
 
-  return (
-    <LegendList
-      contentInsetAdjustmentBehavior="automatic"
-      keyboardShouldPersistTaps="handled"
-      data={data}
-      estimatedItemSize={200}
-      contentContainerClassName="py-4 android:pb-12"
-      extraData={searchValue}
-      removeClippedSubviews={false} // used for selecting text on android
-      keyExtractor={keyExtractor}
-      ItemSeparatorComponent={renderItemSeparator}
-      renderItem={renderItem}
-      ListEmptyComponent={COMPONENTS.length === 0 ? ListEmptyComponent : undefined}
-      recycleItems
-    />
-  );
-}
+  const handleSignOut = async () => {
+    await signOut();
+    router.replace('/');
+  };
 
-function ListEmptyComponent() {
-  const insets = useSafeAreaInsets();
-  const dimensions = useWindowDimensions();
-  const headerHeight = useHeaderHeight();
-  const { colors } = useColorScheme();
-  const height = dimensions.height - headerHeight - insets.bottom - insets.top;
-
-  return (
-    <View style={{ height }} className="flex-1 items-center justify-center gap-1 px-12">
-      <Icon name="file-plus-outline" size={42} color={colors.grey} />
-      <Text variant="title3" className="pb-1 text-center font-semibold">
-        No Components Installed
-      </Text>
-      <Text color="tertiary" variant="subhead" className="pb-4 text-center">
-        You can install any of the free components from the{' '}
-        <Text
-          onPress={() => Linking.openURL('https://nativewindui.com')}
-          variant="subhead"
-          className="text-primary">
-          NativeWindUI
-        </Text>
-        {' website.'}
-      </Text>
-    </View>
-  );
-}
-
-type ComponentItem = { name: string; component: React.FC };
-
-function keyExtractor(item: ComponentItem) {
-  return item.name;
-}
-
-function renderItemSeparator() {
-  return <View className="p-2" />;
-}
-
-function renderItem({ item }: { item: ComponentItem }) {
-  return (
-    <Card title={item.name}>
-      <item.component />
-    </Card>
-  );
-}
-
-function Card({ children, title }: { children: React.ReactNode; title: string }) {
-  return (
-    <View className="px-4">
-      <View className="gap-4 rounded-xl border border-border bg-card p-4 pb-6 shadow-sm shadow-black/10 dark:shadow-none">
-        <Text className="text-center text-sm font-medium tracking-wider opacity-60">{title}</Text>
-        {children}
-      </View>
-    </View>
-  );
-}
-
-const COMPONENTS: ComponentItem[] = [
-  {
-    name: 'Text',
-    component: function TextExample() {
-      return (
-        <View className="gap-2">
-          <Text variant="largeTitle" className="text-center">
-            Large Title
-          </Text>
-          <Text variant="title1" className="text-center">
-            Title 1
-          </Text>
-          <Text variant="title2" className="text-center">
-            Title 2
-          </Text>
-          <Text variant="title3" className="text-center">
-            Title 3
-          </Text>
-          <Text variant="heading" className="text-center">
-            Heading
-          </Text>
-          <Text variant="body" className="text-center">
-            Body
-          </Text>
-          <Text variant="callout" className="text-center">
-            Callout
-          </Text>
-          <Text variant="subhead" className="text-center">
-            Subhead
-          </Text>
-          <Text variant="footnote" className="text-center">
-            Footnote
-          </Text>
-          <Text variant="caption1" className="text-center">
-            Caption 1
-          </Text>
-          <Text variant="caption2" className="text-center">
-            Caption 2
-          </Text>
+  // If user is already logged in, show a different screen
+  if (user) {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View className="flex-1 items-center justify-center px-8">
+          <Text className="text-xl">Welcome back, {user.email}</Text>
+          <Button className="mt-4" onPress={handleSignOut}>
+            <Text>Sign out</Text>
+          </Button>
         </View>
-      );
-    },
-  },
-  {
-    name: 'Selectable Text',
-    component: function SelectableTextExample() {
-      return (
-        <Text uiTextView selectable>
-          Long press or double press this text
-        </Text>
-      );
-    },
-  },
-];
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View className="ios:justify-end flex-1 justify-center gap-4 px-8 py-4">
+          <View className="items-center">
+            <Image
+              source={LOGO_SOURCE}
+              className="ios:h-12 ios:w-12 h-8 w-8"
+              resizeMode="contain"
+            />
+          </View>
+          <View className="ios:pb-5 ios:pt-2 pb-2">
+            <Text className="ios:font-extrabold text-center text-3xl font-medium">Welcome to</Text>
+            <Text className="ios:font-extrabold text-center text-3xl font-medium">Noodle</Text>
+          </View>
+          <Link href="/auth/(create-account)" asChild>
+            <Button size={Platform.select({ ios: 'lg', default: 'md' })}>
+              <Text>Sign up free</Text>
+            </Button>
+          </Link>
+          <Button
+            variant="secondary"
+            className="ios:border-foreground/60"
+            size={Platform.select({ ios: 'lg', default: 'md' })}
+            onPress={() => {
+              alertRef.current?.alert({
+                title: 'Coming Soon',
+                message: 'Google Sign In will be available soon!',
+                buttons: [{ text: 'OK', style: 'cancel' }],
+              });
+            }}>
+            <Image
+              source={GOOGLE_SOURCE}
+              className="absolute left-4 h-4 w-4"
+              resizeMode="contain"
+            />
+            <Text className="ios:text-foreground">Continue with Google</Text>
+          </Button>
+          {Platform.OS === 'ios' && (
+            <Button
+              variant="secondary"
+              className="ios:border-foreground/60"
+              size={Platform.select({ ios: 'lg', default: 'md' })}
+              onPress={() => {
+                alertRef.current?.alert({
+                  title: 'Coming Soon',
+                  message: 'Apple Sign In will be available soon!',
+                  buttons: [{ text: 'OK', style: 'cancel' }],
+                });
+              }}>
+              <Text className="ios:text-foreground absolute left-4 text-[22px]"></Text>
+              <Text className="ios:text-foreground">Continue with Apple</Text>
+            </Button>
+          )}
+          <Link href="/auth/(login)" asChild>
+            <Button variant="plain" size={Platform.select({ ios: 'lg', default: 'md' })}>
+              <Text className="text-primary">Log in</Text>
+            </Button>
+          </Link>
+        </View>
+      </SafeAreaView>
+      <AlertAnchor ref={alertRef} />
+    </>
+  );
+}
