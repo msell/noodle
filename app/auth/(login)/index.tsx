@@ -12,6 +12,7 @@ import { Button } from '~/components/nativewindui/Button';
 import { Form, FormItem, FormSection } from '~/components/nativewindui/Form';
 import { Text } from '~/components/nativewindui/Text';
 import { TextField } from '~/components/nativewindui/TextField';
+import { signIn, authState } from '~/lib/auth';
 
 const LOGO_SOURCE = {
   uri: 'https://nativewindui.com/_next/image?url=/_next/static/media/logo.28276aeb.png&w=2048&q=75',
@@ -20,6 +21,16 @@ const LOGO_SOURCE = {
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
   const [focusedTextField, setFocusedTextField] = React.useState<'email' | 'password' | null>(null);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const handleLogin = async () => {
+    await signIn(email, password);
+    if (authState.user.get()) {
+      router.replace('/');
+    }
+  };
+
   return (
     <View className="ios:bg-card flex-1" style={{ paddingBottom: insets.bottom }}>
       <Stack.Screen
@@ -28,7 +39,7 @@ export default function LoginScreen() {
           headerShadowVisible: false,
           headerLeft() {
             return (
-              <Link asChild href="/auth">
+              <Link asChild href="/(auth)">
                 <Button variant="plain" className="ios:px-0">
                   <Text className="text-primary">Cancel</Text>
                 </Button>
@@ -54,7 +65,7 @@ export default function LoginScreen() {
               {Platform.select({ ios: 'Welcome back!', default: 'Log in' })}
             </Text>
             {Platform.OS !== 'ios' && (
-              <Text className="ios:text-sm text-muted-foreground text-center">Welcome back!</Text>
+              <Text className="ios:text-sm text-center text-muted-foreground">Welcome back!</Text>
             )}
           </View>
           <View className="ios:pt-4 pt-6">
@@ -72,6 +83,8 @@ export default function LoginScreen() {
                     keyboardType="email-address"
                     textContentType="emailAddress"
                     returnKeyType="next"
+                    value={email}
+                    onChangeText={setEmail}
                   />
                 </FormItem>
                 <FormItem>
@@ -83,14 +96,16 @@ export default function LoginScreen() {
                     secureTextEntry
                     returnKeyType="done"
                     textContentType="password"
-                    onSubmitEditing={() => router.replace('/')}
+                    value={password}
+                    onChangeText={setPassword}
+                    onSubmitEditing={handleLogin}
                   />
                 </FormItem>
               </FormSection>
               <View className="flex-row">
-                <Link asChild href="/auth/(login)/forgot-password">
+                <Link asChild href="/(auth)/(login)/forgot-password">
                   <Button size="sm" variant="plain" className="px-0.5">
-                    <Text className="text-primary text-sm">Forgot password?</Text>
+                    <Text className="text-sm text-primary">Forgot password?</Text>
                   </Button>
                 </Link>
               </View>
@@ -105,11 +120,7 @@ export default function LoginScreen() {
         }}>
         {Platform.OS === 'ios' ? (
           <View className=" px-12 py-4">
-            <Button
-              size="lg"
-              onPress={() => {
-                router.replace('/');
-              }}>
+            <Button size="lg" onPress={handleLogin}>
               <Text>Continue</Text>
             </Button>
           </View>
@@ -119,9 +130,9 @@ export default function LoginScreen() {
               variant="plain"
               className="px-2"
               onPress={() => {
-                router.replace('/auth/(create-account)');
+                router.replace('/(auth)/(create-account)');
               }}>
-              <Text className="text-primary px-0.5 text-sm">Create Account</Text>
+              <Text className="px-0.5 text-sm text-primary">Create Account</Text>
             </Button>
             <Button
               onPress={() => {
@@ -130,7 +141,7 @@ export default function LoginScreen() {
                   return;
                 }
                 KeyboardController.dismiss();
-                router.replace('/');
+                handleLogin();
               }}>
               <Text className="text-sm">{focusedTextField === 'email' ? 'Next' : 'Submit'}</Text>
             </Button>
@@ -141,9 +152,9 @@ export default function LoginScreen() {
         <Button
           variant="plain"
           onPress={() => {
-            router.replace('/auth/(create-account)');
+            router.replace('/(auth)/(create-account)');
           }}>
-          <Text className="text-primary text-sm">Create Account</Text>
+          <Text className="text-sm text-primary">Create Account</Text>
         </Button>
       )}
     </View>

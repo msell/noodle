@@ -14,6 +14,7 @@ import { Button } from '~/components/nativewindui/Button';
 import { Form, FormItem, FormSection } from '~/components/nativewindui/Form';
 import { Text } from '~/components/nativewindui/Text';
 import { TextField } from '~/components/nativewindui/TextField';
+import { resetPassword } from '~/lib/auth';
 
 const LOGO_SOURCE = {
   uri: 'https://nativewindui.com/_next/image?url=/_next/static/media/logo.28276aeb.png&w=2048&q=75',
@@ -22,8 +23,10 @@ const LOGO_SOURCE = {
 export default function ForgotPasswordScreen() {
   const insets = useSafeAreaInsets();
   const alertRef = React.useRef<AlertRef>(null);
+  const [email, setEmail] = React.useState('');
 
-  function onSubmit() {
+  async function onSubmit() {
+    await resetPassword(email);
     alertRef.current?.prompt({
       title: 'Check your inbox',
       message: "We've sent you a code to reset your password. Enter it below:",
@@ -77,7 +80,7 @@ export default function ForgotPasswordScreen() {
               {Platform.select({ ios: "What's your email?", default: 'Forgot password' })}
             </Text>
             {Platform.OS !== 'ios' && (
-              <Text className="ios:text-sm text-muted-foreground text-center">
+              <Text className="ios:text-sm text-center text-muted-foreground">
                 What's your email?
               </Text>
             )}
@@ -95,6 +98,8 @@ export default function ForgotPasswordScreen() {
                     keyboardType="email-address"
                     textContentType="emailAddress"
                     returnKeyType="next"
+                    value={email}
+                    onChangeText={setEmail}
                   />
                 </FormItem>
               </FormSection>
@@ -115,9 +120,9 @@ export default function ForgotPasswordScreen() {
               variant="plain"
               className="px-2"
               onPress={() => {
-                router.replace('/auth/(create-account)');
+                router.replace('/(auth)/(create-account)');
               }}>
-              <Text className="text-primary text-sm">Create Account</Text>
+              <Text className="text-sm text-primary">Create Account</Text>
             </Button>
             <Button onPress={onSubmit}>
               <Text className="text-sm">Submit</Text>

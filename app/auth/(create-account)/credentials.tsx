@@ -12,6 +12,7 @@ import { Button } from '~/components/nativewindui/Button';
 import { Form, FormItem, FormSection } from '~/components/nativewindui/Form';
 import { Text } from '~/components/nativewindui/Text';
 import { TextField } from '~/components/nativewindui/TextField';
+import { signUp, authState } from '~/lib/auth';
 
 const LOGO_SOURCE = {
   uri: 'https://nativewindui.com/_next/image?url=/_next/static/media/logo.28276aeb.png&w=2048&q=75',
@@ -22,6 +23,21 @@ export default function CredentialsScreen() {
   const [focusedTextField, setFocusedTextField] = React.useState<
     'email' | 'password' | 'confirm-password' | null
   >(null);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      // TODO: Show error message
+      return;
+    }
+    await signUp(email, password, '', '');
+    if (authState.user.get()) {
+      router.replace('/');
+    }
+  };
+
   return (
     <View className="ios:bg-card flex-1" style={{ paddingBottom: insets.bottom }}>
       <KeyboardAwareScrollView
@@ -61,6 +77,8 @@ export default function CredentialsScreen() {
                     keyboardType="email-address"
                     textContentType="emailAddress"
                     returnKeyType="next"
+                    value={email}
+                    onChangeText={setEmail}
                   />
                 </FormItem>
                 <FormItem>
@@ -74,6 +92,8 @@ export default function CredentialsScreen() {
                     secureTextEntry
                     returnKeyType="next"
                     textContentType="newPassword"
+                    value={password}
+                    onChangeText={setPassword}
                   />
                 </FormItem>
                 <FormItem>
@@ -82,10 +102,12 @@ export default function CredentialsScreen() {
                     label={Platform.select({ ios: undefined, default: 'Confirm password' })}
                     onFocus={() => setFocusedTextField('confirm-password')}
                     onBlur={() => setFocusedTextField(null)}
-                    onSubmitEditing={() => router.replace('/')}
+                    onSubmitEditing={handleSignUp}
                     secureTextEntry
                     returnKeyType="done"
                     textContentType="newPassword"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
                   />
                 </FormItem>
               </FormSection>
@@ -96,11 +118,7 @@ export default function CredentialsScreen() {
       <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
         {Platform.OS === 'ios' ? (
           <View className=" px-12 py-4">
-            <Button
-              size="lg"
-              onPress={() => {
-                router.replace('/');
-              }}>
+            <Button size="lg" onPress={handleSignUp}>
               <Text>Submit</Text>
             </Button>
           </View>
@@ -113,7 +131,7 @@ export default function CredentialsScreen() {
                   return;
                 }
                 KeyboardController.dismiss();
-                router.replace('/');
+                handleSignUp();
               }}>
               <Text className="text-sm">
                 {focusedTextField !== 'confirm-password' ? 'Next' : 'Submit'}
