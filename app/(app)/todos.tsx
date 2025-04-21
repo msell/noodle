@@ -1,8 +1,8 @@
 import { observer } from '@legendapp/state/react';
 import { FlatList, View } from 'react-native';
-import { Tables } from '~/types/database.types';
-import { Text } from '~/components/nativewindui/Text';
 
+import { Text } from '~/components/nativewindui/Text';
+import { Tables } from '~/types/database.types';
 import { todos$ as _todos$ } from '~/utils/SupaLegend';
 
 export const Todo = ({ todo }: { todo: Tables<'todos'> }) => {

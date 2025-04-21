@@ -6,8 +6,8 @@ import { ThemeProvider as NavThemeProvider } from '@react-navigation/native';
 import { Stack, Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 // import { Pressable, View } from 'react-native';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { useEffect } from 'react';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { ThemeToggle } from '~/components/ThemeToggle';
 import { authState } from '~/lib/auth';
