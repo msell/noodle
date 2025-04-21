@@ -62,7 +62,9 @@ export default function LoginScreen() {
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.tron.log(error.message);
+        if (__DEV__) {
+          console.tron.log(error.message);
+        }
       }
       setErrors((prev) => ({
         ...prev,

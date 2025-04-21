@@ -2,15 +2,15 @@ import '~/lib/reactotron';
 import '../global.css';
 import 'expo-dev-client';
 import { ThemeProvider as NavThemeProvider } from '@react-navigation/native';
-import { Icon } from '@roninoss/icons';
-import { Link, Stack, Redirect } from 'expo-router';
+// import { Icon } from '@roninoss/icons';
+import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Pressable, View } from 'react-native';
+// import { Pressable, View } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { ThemeToggle } from '~/components/ThemeToggle';
-import { authState } from '~/lib/auth';
-import { cn } from '~/lib/cn';
+// import { authState } from '~/lib/auth';
+// import { cn } from '~/lib/cn';
 import { NAV_THEME } from '~/theme';
 import { useColorScheme, useInitialAndroidBarSync } from '~/utils/useColorScheme';
 
@@ -22,7 +22,7 @@ export {
 export default function RootLayout() {
   useInitialAndroidBarSync();
   const { colorScheme, isDarkColorScheme } = useColorScheme();
-  const user = authState.user.get();
+  // const user = authState.user.get();
 
   return (
     <>
@@ -57,20 +57,20 @@ const INDEX_OPTIONS = {
   headerShown: false,
 } as const;
 
-function SettingsIcon() {
-  const { colors } = useColorScheme();
-  return (
-    <Link href="/modal" asChild>
-      <Pressable className="opacity-80">
-        {({ pressed }) => (
-          <View className={cn(pressed ? 'opacity-50' : 'opacity-90')}>
-            <Icon name="cog-outline" color={colors.foreground} />
-          </View>
-        )}
-      </Pressable>
-    </Link>
-  );
-}
+// function SettingsIcon() {
+//   const { colors } = useColorScheme();
+//   return (
+//     <Link href="/modal" asChild>
+//       <Pressable className="opacity-80">
+//         {({ pressed }) => (
+//           <View className={cn(pressed ? 'opacity-50' : 'opacity-90')}>
+//             <Icon name="cog-outline" color={colors.foreground} />
+//           </View>
+//         )}
+//       </Pressable>
+//     </Link>
+//   );
+// }
 
 const MODAL_OPTIONS = {
   presentation: 'modal',
