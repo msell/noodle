@@ -3,13 +3,14 @@ import '../global.css';
 import 'expo-dev-client';
 import { ThemeProvider as NavThemeProvider } from '@react-navigation/native';
 // import { Icon } from '@roninoss/icons';
-import { Stack } from 'expo-router';
+import { Stack, Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 // import { Pressable, View } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { useEffect } from 'react';
 
 import { ThemeToggle } from '~/components/ThemeToggle';
-// import { authState } from '~/lib/auth';
+import { authState } from '~/lib/auth';
 // import { cn } from '~/lib/cn';
 import { NAV_THEME } from '~/theme';
 import { useColorScheme, useInitialAndroidBarSync } from '~/utils/useColorScheme';
@@ -22,7 +23,29 @@ export {
 export default function RootLayout() {
   useInitialAndroidBarSync();
   const { colorScheme, isDarkColorScheme } = useColorScheme();
-  // const user = authState.user.get();
+  const user = authState.user.get();
+  const isLoading = authState.isLoading.get();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const inAuthGroup = segments[0] === '(app)';
+
+    if (user && !inAuthGroup) {
+      // Redirect to (app) group if authenticated but not in the group
+      router.replace('/(app)');
+    } else if (!user && inAuthGroup) {
+      // Redirect to welcome screen if not authenticated but in auth group
+      router.replace('/');
+    }
+  }, [user, segments, isLoading]);
+
+  if (isLoading) {
+    // While auth state is loading, don't render anything
+    return null;
+  }
 
   return (
     <>
@@ -35,12 +58,7 @@ export default function RootLayout() {
 
       <KeyboardProvider statusBarTranslucent navigationBarTranslucent>
         <NavThemeProvider value={NAV_THEME[colorScheme]}>
-          <Stack screenOptions={SCREEN_OPTIONS}>
-            <Stack.Screen name="index" options={INDEX_OPTIONS} />
-            <Stack.Screen name="modal" options={MODAL_OPTIONS} />
-            <Stack.Screen name="(app)" options={{ headerShown: false }} />
-            <Stack.Screen name="auth" options={{ headerShown: false }} />
-          </Stack>
+          <Slot />
         </NavThemeProvider>
       </KeyboardProvider>
 

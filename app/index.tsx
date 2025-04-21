@@ -1,4 +1,4 @@
-import { Link, router } from 'expo-router';
+import { Link, router, Stack } from 'expo-router';
 import * as React from 'react';
 import { Image, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,7 +7,7 @@ import { AlertAnchor } from '~/components/nativewindui/Alert';
 import { AlertRef } from '~/components/nativewindui/Alert/types';
 import { Button } from '~/components/nativewindui/Button';
 import { Text } from '~/components/nativewindui/Text';
-import { authState, signOut } from '~/lib/auth';
+import { authState } from '~/lib/auth';
 if (__DEV__) {
   require('../devtools/ReactotronConfig');
 }
@@ -22,29 +22,15 @@ const GOOGLE_SOURCE = {
 
 export default function WelcomeScreen() {
   const alertRef = React.useRef<AlertRef>(null);
-  const user = authState.user.get();
+  const isLoading = authState.isLoading.get();
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.replace('/');
-  };
-
-  // If user is already logged in, show a different screen
-  if (user) {
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View className="flex-1 items-center justify-center px-8">
-          <Text className="text-xl">Welcome back, {user.email}</Text>
-          <Button className="mt-4" onPress={handleSignOut}>
-            <Text>Sign out</Text>
-          </Button>
-        </View>
-      </SafeAreaView>
-    );
+  if (isLoading) {
+    return null;
   }
 
   return (
     <>
+      <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView style={{ flex: 1 }}>
         <View className="ios:justify-end flex-1 justify-center gap-4 px-8 py-4">
           <View className="items-center">

@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import * as React from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,7 +12,7 @@ export default function HomeScreen() {
 
   const handleSignOut = async () => {
     await signOut();
-    router.replace('/');
+    router.replace('/auth/(login)');
   };
 
   return (
@@ -22,6 +22,12 @@ export default function HomeScreen() {
         <Button className="mt-4" onPress={handleSignOut}>
           <Text>Sign Out</Text>
         </Button>
+        <Button className="mt-4" onPress={handleSignOut}>
+          <Text>Sign Out</Text>
+        </Button>
+        <Link href="/todos">
+          <Text className="text-blue-500">Todos</Text>
+        </Link>
       </View>
     </SafeAreaView>
   );

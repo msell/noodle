@@ -58,7 +58,7 @@ export default function LoginScreen() {
     try {
       await signIn(email, password);
       if (authState.user.get()) {
-        router.replace('/');
+        router.replace('/(app)');
       }
     } catch (error) {
       if (error instanceof Error) {
