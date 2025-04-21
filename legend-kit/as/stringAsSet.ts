@@ -6,11 +6,11 @@
  * See LICENSE file in https://github.com/LegendApp/legend-kit for more information
  */
 
-import { linked, type ObservableParam } from "@legendapp/state";
+import { linked, type ObservableParam } from '@legendapp/state';
 
 export const stringAsSet = (str$: ObservableParam<string>) =>
   linked({
-    get: () => new Set<string>(JSON.parse(str$?.get() || "[]")),
+    get: () => new Set<string>(JSON.parse(str$?.get() || '[]')),
     set: ({ value }) => {
       str$?.set(JSON.stringify(Array.from(value)));
     },

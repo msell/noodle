@@ -16,13 +16,13 @@ import {
   isObject,
   mergeIntoObservable,
   observable,
-} from "@legendapp/state";
+} from '@legendapp/state';
 
 const { clone } = internal;
 
 export function createDraft<T extends Record<string, any>>(
   obs$: Observable<T>,
-  options?: { createClone?: (t: T) => Partial<T> },
+  options?: { createClone?: (t: T) => Partial<T> }
 ): { draft$: Observable<T>; cleanup: () => void } {
   const createClone = options?.createClone || ((v) => clone(v));
   // Create a draft observable

@@ -6,20 +6,19 @@
  * See LICENSE file in https://github.com/LegendApp/legend-kit for more information
  */
 
-import type { Observable } from "@legendapp/state";
-import { useMount, useObservable } from "@legendapp/state/react";
-import type { RefObject } from "react";
+import type { Observable } from '@legendapp/state';
+import { useMount, useObservable } from '@legendapp/state/react';
+import type { RefObject } from 'react';
 
 export function useElementScroll(
   target: RefObject<HTMLElement> | HTMLElement,
-  field: "scrollTop" | "scrollLeft" = "scrollTop",
+  field: 'scrollTop' | 'scrollLeft' = 'scrollTop'
 ): Observable<number> {
   // Create an observable to store the scroll value
   const obs$ = useObservable<number>(undefined);
 
   useMount(() => {
-    const element: HTMLElement =
-      target instanceof HTMLElement ? target : target.current;
+    const element: HTMLElement = target instanceof HTMLElement ? target : target.current;
 
     // Handle element scroll and set it on the observable
     const handleScroll = () => {
@@ -29,9 +28,9 @@ export function useElementScroll(
       }
     };
 
-    element.addEventListener("scroll", handleScroll);
+    element.addEventListener('scroll', handleScroll);
     return () => {
-      element.removeEventListener("scroll", handleScroll);
+      element.removeEventListener('scroll', handleScroll);
     };
   });
 

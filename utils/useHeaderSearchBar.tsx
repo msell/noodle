@@ -2,9 +2,8 @@ import { useNavigation } from 'expo-router';
 import * as React from 'react';
 import { SearchBarProps } from 'react-native-screens';
 
-import { useColorScheme } from '~/utils/useColorScheme';
-
 import { COLORS } from '~/theme/colors';
+import { useColorScheme } from '~/utils/useColorScheme';
 
 export function useHeaderSearchBar(props: SearchBarProps = {}) {
   const { colorScheme, colors } = useColorScheme();

@@ -6,11 +6,12 @@
  * See LICENSE file in https://github.com/LegendApp/legend-kit for more information
  */
 
-import { Observable, observable } from "@legendapp/state";
-import { memo } from "react";
-import { useWindowDimensions as useWindowDimensionsRN } from "react-native";
-import { HookToObservable } from "../react/HookToObservable";
-import { useSelector } from "@legendapp/state/react";
+import { Observable, observable } from '@legendapp/state';
+import { useSelector } from '@legendapp/state/react';
+import { memo } from 'react';
+import { useWindowDimensions as useWindowDimensionsRN } from 'react-native';
+
+import { HookToObservable } from '../react/HookToObservable';
 
 // Observable to store window dimensions
 export const windowDimensions$ = observable({

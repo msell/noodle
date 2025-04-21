@@ -6,12 +6,12 @@
  * See LICENSE file in https://github.com/LegendApp/legend-kit for more information
  */
 
-import { linked, type ObservableParam } from "@legendapp/state";
+import { linked, type ObservableParam } from '@legendapp/state';
 
 export const stringAsRecord = (str$: ObservableParam<string>) =>
   linked({
     get: () => {
-      return JSON.parse(str$?.get() || "{}") as Record<string, string>;
+      return JSON.parse(str$?.get() || '{}') as Record<string, string>;
     },
     set: ({ value }) => {
       str$?.set(JSON.stringify(value));

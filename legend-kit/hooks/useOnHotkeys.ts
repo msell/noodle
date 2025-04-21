@@ -9,8 +9,9 @@
  * See LICENSE file in https://github.com/LegendApp/legend-kit for more information
  */
 
-import { useEffectOnce } from "@legendapp/state/react";
-import { onHotkeys } from "../utilities/onHotkeys";
+import { useEffectOnce } from '@legendapp/state/react';
+
+import { onHotkeys } from '../utilities/onHotkeys';
 
 // The React hook version of onHotkeys
 export function useOnHotkeys(hotkeyCallbacks: Record<string, () => void>) {

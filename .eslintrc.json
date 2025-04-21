@@ -1,5 +1,8 @@
 {
   "root": true,
-  "extends": ["universe/native", "plugin:reactotron/recommended"],
-  "plugins": ["reactotron"]
+  "extends": ["universe/native"],
+  "plugins": ["reactotron"],
+  "rules": {
+    "reactotron/no-tron-in-production": "error"
+  }
 }

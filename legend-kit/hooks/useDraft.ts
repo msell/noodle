@@ -9,14 +9,15 @@
  * See LICENSE file in https://github.com/LegendApp/legend-kit for more information
  */
 
-import { Observable } from "@legendapp/state";
-import { useUnmountOnce } from "@legendapp/state/react";
-import { useMemo } from "react";
-import { createDraft } from "../utilities/createDraft";
+import { Observable } from '@legendapp/state';
+import { useUnmountOnce } from '@legendapp/state/react';
+import { useMemo } from 'react';
+
+import { createDraft } from '../utilities/createDraft';
 
 export function useDraft<T extends Record<string, any>>(
   obs$: Observable<T>,
-  options?: { createClone?: (t: T) => Partial<T> },
+  options?: { createClone?: (t: T) => Partial<T> }
 ): Observable<T> {
   const { draft$, cleanup } = useMemo(() => createDraft(obs$, options), []);
 

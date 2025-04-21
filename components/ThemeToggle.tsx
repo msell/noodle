@@ -3,8 +3,8 @@ import { Pressable, View } from 'react-native';
 import Animated, { LayoutAnimationConfig, ZoomInRotate } from 'react-native-reanimated';
 
 import { cn } from '~/lib/cn';
-import { useColorScheme } from '~/utils/useColorScheme';
 import { COLORS } from '~/theme/colors';
+import { useColorScheme } from '~/utils/useColorScheme';
 
 export function ThemeToggle() {
   const { colorScheme, toggleColorScheme } = useColorScheme();

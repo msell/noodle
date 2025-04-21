@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Platform, TextInput, TextInputProps, View } from 'react-native';
+
 import { Text } from '~/components/nativewindui/Text';
 import { cn } from '~/lib/cn';
 

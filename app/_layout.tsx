@@ -9,10 +9,10 @@ import { Pressable, View } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { ThemeToggle } from '~/components/ThemeToggle';
-import { cn } from '~/lib/cn';
-import { useColorScheme, useInitialAndroidBarSync } from '~/utils/useColorScheme';
-import { NAV_THEME } from '~/theme';
 import { authState } from '~/lib/auth';
+import { cn } from '~/lib/cn';
+import { NAV_THEME } from '~/theme';
+import { useColorScheme, useInitialAndroidBarSync } from '~/utils/useColorScheme';
 
 export {
   // Catch any errors thrown by the Layout component.

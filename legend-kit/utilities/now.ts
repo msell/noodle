@@ -6,7 +6,7 @@
  * See LICENSE file in https://github.com/LegendApp/legend-kit for more information
  */
 
-import { observable } from "@legendapp/state";
+import { observable } from '@legendapp/state';
 
 const MSPerMinute = 60000;
 

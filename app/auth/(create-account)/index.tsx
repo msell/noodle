@@ -41,7 +41,7 @@ export default function InfoScreen() {
               {Platform.select({ ios: "What's your name?", default: 'Create your account' })}
             </Text>
             {Platform.OS !== 'ios' && (
-              <Text className="ios:text-sm text-muted-foreground text-center">Welcome back!</Text>
+              <Text className="ios:text-sm text-center text-muted-foreground">Welcome back!</Text>
             )}
           </View>
           <View className="ios:pt-4 pt-6">
@@ -102,7 +102,7 @@ export default function InfoScreen() {
               onPress={() => {
                 router.replace('/auth/(login)');
               }}>
-              <Text className="text-primary text-sm">Already have an account?</Text>
+              <Text className="text-sm text-primary">Already have an account?</Text>
             </Button>
             <Button
               onPress={() => {
@@ -124,7 +124,7 @@ export default function InfoScreen() {
           onPress={() => {
             router.replace('/auth/(login)');
           }}>
-          <Text className="text-primary text-sm">Already have an account?</Text>
+          <Text className="text-sm text-primary">Already have an account?</Text>
         </Button>
       )}
     </View>

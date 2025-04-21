@@ -1,6 +1,7 @@
 import { observable } from '@legendapp/state';
-import { supabase } from './supabase';
 import { Session, User } from '@supabase/supabase-js';
+
+import { supabase } from './supabase';
 
 interface AuthState {
   session: Session | null;

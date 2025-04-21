@@ -1,6 +1,3 @@
-if (__DEV__) {
-  require('../devtools/ReactotronConfig');
-}
 import { Link, router } from 'expo-router';
 import * as React from 'react';
 import { Image, Platform, View } from 'react-native';
@@ -11,6 +8,9 @@ import { AlertRef } from '~/components/nativewindui/Alert/types';
 import { Button } from '~/components/nativewindui/Button';
 import { Text } from '~/components/nativewindui/Text';
 import { authState, signOut } from '~/lib/auth';
+if (__DEV__) {
+  require('../devtools/ReactotronConfig');
+}
 
 const LOGO_SOURCE = {
   uri: 'https://nativewindui.com/_next/image?url=/_next/static/media/logo.28276aeb.png&w=2048&q=75',
@@ -93,7 +93,7 @@ export default function WelcomeScreen() {
                   buttons: [{ text: 'OK', style: 'cancel' }],
                 });
               }}>
-              <Text className="ios:text-foreground absolute left-4 text-[22px]"></Text>
+              <Text className="ios:text-foreground absolute left-4 text-[22px]" />
               <Text className="ios:text-foreground">Continue with Apple</Text>
             </Button>
           )}
