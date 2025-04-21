@@ -23,11 +23,51 @@ export default function LoginScreen() {
   const [focusedTextField, setFocusedTextField] = React.useState<'email' | 'password' | null>(null);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [errors, setErrors] = React.useState({
+    email: '',
+    password: '',
+    general: '',
+  });
+
+  const validateForm = () => {
+    const newErrors = {
+      email: '',
+      password: '',
+      general: '',
+    };
+
+    if (!email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    setErrors(newErrors);
+    return !newErrors.email && !newErrors.password;
+  };
 
   const handleLogin = async () => {
-    await signIn(email, password);
-    if (authState.user.get()) {
-      router.replace('/');
+    if (!validateForm()) return;
+
+    try {
+      await signIn(email, password);
+      if (authState.user.get()) {
+        router.replace('/');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.tron.log(error.message);
+      }
+      setErrors((prev) => ({
+        ...prev,
+        general: error instanceof Error ? error.message : 'Invalid credentials',
+      }));
     }
   };
 
@@ -39,7 +79,7 @@ export default function LoginScreen() {
           headerShadowVisible: false,
           headerLeft() {
             return (
-              <Link asChild href="/(auth)">
+              <Link asChild href="/">
                 <Button variant="plain" className="ios:px-0">
                   <Text className="text-primary">Cancel</Text>
                 </Button>
@@ -69,6 +109,9 @@ export default function LoginScreen() {
             )}
           </View>
           <View className="ios:pt-4 pt-6">
+            {errors.general ? (
+              <Text className="pb-4 text-center text-sm text-destructive">{errors.general}</Text>
+            ) : null}
             <Form className="gap-2">
               <FormSection className="ios:bg-background">
                 <FormItem>
@@ -77,15 +120,22 @@ export default function LoginScreen() {
                     label={Platform.select({ ios: undefined, default: 'Email' })}
                     onSubmitEditing={() => KeyboardController.setFocusTo('next')}
                     submitBehavior="submit"
-                    autoFocus
                     autoCapitalize="none"
+                    autoFocus
                     onFocus={() => setFocusedTextField('email')}
-                    onBlur={() => setFocusedTextField(null)}
+                    onBlur={() => {
+                      setFocusedTextField(null);
+                      if (email) validateForm();
+                    }}
                     keyboardType="email-address"
                     textContentType="emailAddress"
                     returnKeyType="next"
                     value={email}
-                    onChangeText={setEmail}
+                    onChangeText={(text) => {
+                      setEmail(text);
+                      setErrors((prev) => ({ ...prev, email: '', general: '' }));
+                    }}
+                    error={errors.email}
                   />
                 </FormItem>
                 <FormItem>
@@ -93,18 +143,25 @@ export default function LoginScreen() {
                     placeholder={Platform.select({ ios: 'Password', default: '' })}
                     label={Platform.select({ ios: undefined, default: 'Password' })}
                     onFocus={() => setFocusedTextField('password')}
-                    onBlur={() => setFocusedTextField(null)}
+                    onBlur={() => {
+                      setFocusedTextField(null);
+                      if (password) validateForm();
+                    }}
                     secureTextEntry
                     returnKeyType="done"
                     textContentType="password"
                     value={password}
-                    onChangeText={setPassword}
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      setErrors((prev) => ({ ...prev, password: '', general: '' }));
+                    }}
                     onSubmitEditing={handleLogin}
+                    error={errors.password}
                   />
                 </FormItem>
               </FormSection>
               <View className="flex-row">
-                <Link asChild href="/(auth)/(login)/forgot-password">
+                <Link asChild href="/auth/(login)/forgot-password">
                   <Button size="sm" variant="plain" className="px-0.5">
                     <Text className="text-sm text-primary">Forgot password?</Text>
                   </Button>
@@ -131,7 +188,7 @@ export default function LoginScreen() {
               variant="plain"
               className="px-2"
               onPress={() => {
-                router.replace('/(auth)/(create-account)');
+                router.replace('/auth/(create-account)');
               }}>
               <Text className="px-0.5 text-sm text-primary">Create Account</Text>
             </Button>
@@ -149,15 +206,6 @@ export default function LoginScreen() {
           </View>
         )}
       </KeyboardStickyView>
-      {Platform.OS === 'ios' && (
-        <Button
-          variant="plain"
-          onPress={() => {
-            router.replace('/(auth)/(create-account)');
-          }}>
-          <Text className="text-sm text-primary">Create Account</Text>
-        </Button>
-      )}
     </View>
   );
 }

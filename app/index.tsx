@@ -1,3 +1,6 @@
+if (__DEV__) {
+  require('../devtools/ReactotronConfig');
+}
 import { Link, router } from 'expo-router';
 import * as React from 'react';
 import { Image, Platform, View } from 'react-native';

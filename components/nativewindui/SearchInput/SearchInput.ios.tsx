@@ -21,7 +21,7 @@ import type { SearchInputProps } from './types';
 
 import { Text } from '~/components/nativewindui/Text';
 import { cn } from '~/lib/cn';
-import { useColorScheme } from '~/lib/useColorScheme';
+import { useColorScheme } from '~/utils/useColorScheme';
 
 // Add as class when possible: https://github.com/marklawlor/nativewind/issues/522
 const BORDER_CURVE: ViewStyle = {
@@ -126,7 +126,7 @@ const SearchInput = React.forwardRef<React.ElementRef<typeof TextInput>, SearchI
       <Animated.View className="flex-row items-center" style={rootStyle}>
         <Animated.View
           style={BORDER_CURVE}
-          className={cn('bg-card flex-1 flex-row rounded-lg', containerClassName)}>
+          className={cn('flex-1 flex-row rounded-lg bg-card', containerClassName)}>
           <View
             className={cn(
               'absolute bottom-0 left-0 top-0 z-50 justify-center pl-1.5',
@@ -139,7 +139,7 @@ const SearchInput = React.forwardRef<React.ElementRef<typeof TextInput>, SearchI
             placeholder={placeholder}
             className={cn(
               !showCancel && 'active:bg-muted/5 dark:active:bg-muted/20',
-              'text-foreground flex-1 rounded-lg py-2 pl-8  pr-1 text-[17px]',
+              'flex-1 rounded-lg py-2 pl-8 pr-1  text-[17px] text-foreground',
               className
             )}
             value={value}
@@ -163,7 +163,7 @@ const SearchInput = React.forwardRef<React.ElementRef<typeof TextInput>, SearchI
             disabled={!showCancel}
             pointerEvents={!showCancel ? 'none' : 'auto'}
             className="flex-1 justify-center active:opacity-50">
-            <Text className="text-primary px-2">{cancelText}</Text>
+            <Text className="px-2 text-primary">{cancelText}</Text>
           </Pressable>
         </Animated.View>
       </Animated.View>

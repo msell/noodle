@@ -1,3 +1,4 @@
+import '~/lib/reactotron';
 import '../global.css';
 import 'expo-dev-client';
 import { ThemeProvider as NavThemeProvider } from '@react-navigation/native';
@@ -9,7 +10,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { ThemeToggle } from '~/components/ThemeToggle';
 import { cn } from '~/lib/cn';
-import { useColorScheme, useInitialAndroidBarSync } from '~/lib/useColorScheme';
+import { useColorScheme, useInitialAndroidBarSync } from '~/utils/useColorScheme';
 import { NAV_THEME } from '~/theme';
 import { authState } from '~/lib/auth';
 
